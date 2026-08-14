@@ -1,0 +1,8 @@
+dist/
+release-assets/
+__pycache__/
+*.py[cod]
+
+# Local case-study sources require explicit review before public release.
+Enterprise_LLM_RAG_Security_Case_Study.pdf
+Enterprise_LLM_RAG_Security_Case_Study.tex

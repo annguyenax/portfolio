@@ -1,0 +1,75 @@
+name: Portfolio Pages and CV Release
+
+on:
+  push:
+    branches: [main]
+    tags: ['portfolio-v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: portfolio-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate portfolio
+        run: python -m unittest discover -s tests -v
+      - name: Assemble static site
+        run: |
+          mkdir -p dist
+          cp index.html styles.css app.js .nojekyll dist/
+          mkdir -p dist/evidence
+          cp evidence/*.html evidence/*.css dist/evidence/
+      - name: Generate A4 CV PDF
+        run: |
+          python -m http.server 4173 --directory dist >/tmp/portfolio-http.log 2>&1 &
+          google-chrome --headless --no-sandbox --disable-gpu --print-to-pdf=dist/nguyen-van-an-cv.pdf --no-pdf-header-footer 'http://127.0.0.1:4173/?print=1'
+      - name: Package release bundle
+        run: |
+          mkdir -p release-assets
+          cp dist/nguyen-van-an-cv.pdf release-assets/
+          cd dist && zip -r ../release-assets/nguyen-van-an-portfolio.zip .
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-release-assets
+          path: release-assets/
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/portfolio-v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: portfolio-release-assets
+          path: release-assets
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            release-assets/nguyen-van-an-cv.pdf
+            release-assets/nguyen-van-an-portfolio.zip
