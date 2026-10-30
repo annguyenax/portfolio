@@ -25,7 +25,7 @@ jobs:
       - name: Assemble static site
         run: |
           mkdir -p dist
-          cp index.html styles.css app.js .nojekyll dist/
+          cp index.html styles.css app.js favicon.svg og.png .nojekyll dist/
           mkdir -p dist/evidence
           cp evidence/*.html evidence/*.css dist/evidence/
       - name: Generate A4 CV PDF
