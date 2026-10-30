@@ -52,16 +52,62 @@
           <a class="button" href="#evidence" data-i18n="exploreWork">Xem bằng chứng năng lực</a>
           <a class="button button-ghost" href="https://github.com/annguyenax" target="_blank" rel="noreferrer">GitHub ↗</a>
         </div>
+        <p class="hero-footnote"><span data-i18n="base">Ho Chi Minh City, VN</span> · <span data-i18n="education">PTIT · Information Security</span> · <span data-i18n="evidenceFirst">Evidence-first · Reproducible</span></p>
       </div>
-      <aside class="signal-card" aria-label="Tóm tắt hồ sơ">
-        <div class="signal-header"><span data-i18n="signalTitle">TÍN HIỆU HỒ SƠ</span><span>01</span></div>
-        <dl>
-          <div><dt data-i18n="focus">Trọng tâm</dt><dd data-i18n="focusValue">Suricata lab · SRE 2-node lab · TON_IoT detection</dd></div>
-          <div><dt data-i18n="base">Địa điểm</dt><dd>Ho Chi Minh City, VN</dd></div>
-          <div><dt data-i18n="education">Học vấn</dt><dd>PTIT · Information Security</dd></div>
-          <div><dt data-i18n="evidenceFirst">Cách làm</dt><dd>Evidence-first · Reproducible</dd></div>
-        </dl>
-        <div class="scanline" aria-hidden="true"></div>
+      <aside class="noise-board" id="tonChart" aria-label="TON_IoT: Detection rate và False positive theo từng lớp">
+        <div class="noise-header">
+          <span data-i18n="noiseTitle">NOISE BOARD · TON_IOT</span>
+          <span data-i18n="noiseSub">Detection vs. false positive, README (dataset lab)</span>
+        </div>
+        <svg class="noise-svg" viewBox="0 0 320 300" role="img" aria-labelledby="tonTitle">
+          <title id="tonTitle">Detection rate và false positive của bốn lớp TON_IoT</title>
+          <g class="axis" stroke="currentColor" fill="none">
+            <path d="M24 16 V252 H300"/>
+            <path d="M24 32 H300 M24 134 H300" opacity=".25"/>
+          </g>
+          <g font-family="DM Mono, ui-monospace, monospace" font-size="9" fill="currentColor" opacity=".7">
+            <text x="20" y="20" text-anchor="end">100%</text>
+            <text x="20" y="138" text-anchor="end">50%</text>
+            <text x="20" y="256" text-anchor="end">0</text>
+          </g>
+          <!-- scale: 220px = 100%, baseline y=252 -->
+          <g class="layer" tabindex="0" data-layer="Network" data-detail="Network · detection 99.80% · FP 22.00% · accuracy 89.00% · separation 328×">
+            <rect class="bar det" x="44" y="32.4" width="20" height="219.6"/>
+            <rect class="bar fp" x="68" y="203.6" width="20" height="48.4"/>
+            <text x="66" y="270" text-anchor="middle">Network</text>
+          </g>
+          <g class="layer" tabindex="0" data-layer="IoT" data-detail="IoT Modbus · detection 99.5% · FP 20.00% · accuracy 90.00% · separation 33×">
+            <rect class="bar det" x="118" y="33.5" width="20" height="218.5"/>
+            <rect class="bar fp" x="142" y="208" width="20" height="44"/>
+            <text x="140" y="270" text-anchor="middle">IoT</text>
+          </g>
+          <g class="layer" tabindex="0" data-layer="Linux" data-detail="Linux · detection 82.00% · FP 18.00% · accuracy 77.8% · separation 8×">
+            <rect class="bar det" x="192" y="72" width="20" height="180"/>
+            <rect class="bar fp" x="216" y="212.4" width="20" height="39.6"/>
+            <text x="214" y="270" text-anchor="middle">Linux</text>
+          </g>
+          <g class="layer" tabindex="0" data-layer="Windows" data-detail="Windows · detection 98% · FP 4.00% · accuracy 96.6% · separation 36×">
+            <rect class="bar det" x="266" y="36.4" width="20" height="215.6"/>
+            <rect class="bar fp" x="290" y="243.2" width="10" height="8.8"/>
+            <text x="283" y="270" text-anchor="middle">Windows</text>
+          </g>
+          <!-- avg FP 16.0% (recomputed, see repo README note) -> y = 252 - 35.2 -->
+          <path d="M24 216.8 H300" stroke="#ff795c" stroke-dasharray="4 3" fill="none"/>
+          <text x="304" y="213" font-size="8" fill="#ff795c">avg FP 16.0%</text>
+        </svg>
+        <p class="noise-readout" aria-live="polite" data-i18n="noiseDefault" data-default="Bấm một lớp. 4 lớp, trung bình FP 16.0% (tính lại 10/2026, xem README).">Bấm một lớp. 4 lớp, trung bình FP 16.0% (tính lại 10/2026, xem README).</p>
+        <p class="noise-legend"><span class="sw sw-det"></span><span data-i18n="noiseLegendDet">Detection</span> <span class="sw sw-fp"></span><span data-i18n="noiseLegendFp">False positive</span></p>
+        <table class="sr-only">
+          <caption>Bảng TON_IoT gốc (README, README-reported, chưa tái chạy độc lập)</caption>
+          <thead><tr><th>Layer</th><th>Detection</th><th>FP</th><th>Accuracy</th><th>Separation</th></tr></thead>
+          <tbody>
+            <tr><td>Network</td><td>99.80%</td><td>22.00%</td><td>89.00%</td><td>328×</td></tr>
+            <tr><td>IoT (Modbus)</td><td>99.5%</td><td>20.00%</td><td>90.00%</td><td>33×</td></tr>
+            <tr><td>Linux</td><td>82.00%</td><td>18.00%</td><td>77.8%</td><td>8×</td></tr>
+            <tr><td>Windows</td><td>98%</td><td>4.00%</td><td>96.6%</td><td>36×</td></tr>
+          </tbody>
+        </table>
+        <a class="text-link muted" href="https://github.com/annguyenax/ton-iot-zero-day-ids" target="_blank" rel="noreferrer">ton-iot-zero-day-ids ↗</a>
       </aside>
     </section>
 

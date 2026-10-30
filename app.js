@@ -5,7 +5,7 @@ const translations = {
     available: "Open to internship / graduate opportunities",
     heroRole: "SOC INTERN / DETECTION LABS",
     summary: "Final-year Information Security student applying for SOC / Security Monitoring Intern roles. Ready to walk through: a Suricata rules lab, a 2-node logging/hardening lab, and an anomaly detector on TON_IoT — and expanding into AI security/C2 detection.",
-    exploreWork: "Explore the evidence", signalTitle: "PROFILE SIGNAL", focus: "Focus", focusValue: "Suricata lab · SRE 2-node lab · TON_IoT detection", base: "Based in", education: "Education", evidenceFirst: "Approach",
+    exploreWork: "Explore the evidence", noiseTitle: "NOISE BOARD · TON_IOT", noiseSub: "Detection vs. false positive, README (dataset lab)", noiseDefault: "Pick a layer. 4 layers, mean FP 16.0% (recomputed 2026-10, see README).", noiseLegendDet: "Detection", noiseLegendFp: "False positive", base: "Based in", education: "Education", evidenceFirst: "Approach",
     profileLabel: "PROFILE / CV", whatIDo: "I turn security problems into systems that can run, measure and be verified.",
     approach: "I work at the intersection of security engineering, machine learning and system operations. Every project prioritizes an explicit threat model, traceable data, reproducible tests and honest limitations.",
     capabilities: "Core capabilities", evidenceLabel: "EVIDENCE / SELECTED WORK", proofTitle: "Don't trust keywords alone.\nSee how the system was built.",
@@ -46,6 +46,22 @@ langButton.addEventListener('click', () => setLanguage(root.lang === 'vi' ? 'en'
 themeButton.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
 document.querySelector('#printCv').addEventListener('click', () => window.print());
 document.querySelector('#currentYear').textContent = new Date().getFullYear();
+
+// Noise Board: click/focus a TON_IoT layer to read its full detail in the readout line.
+(function initNoiseBoard() {
+  const chart = document.querySelector('#tonChart');
+  if (!chart) return;
+  const readout = chart.querySelector('.noise-readout');
+  const defaultText = readout ? readout.textContent : '';
+  chart.querySelectorAll('.layer').forEach((layer) => {
+    const show = () => { if (readout) readout.textContent = layer.dataset.detail; };
+    const reset = () => { if (readout) readout.textContent = readout.dataset.vi ? (root.lang === 'vi' ? readout.dataset.vi : translations.en.noiseDefault) : defaultText; };
+    layer.addEventListener('click', show);
+    layer.addEventListener('focus', show);
+    layer.addEventListener('mouseleave', reset);
+    layer.addEventListener('blur', reset);
+  });
+})();
 
 setLanguage(localStorage.getItem('portfolio-language') || 'vi');
 setTheme(localStorage.getItem('portfolio-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
