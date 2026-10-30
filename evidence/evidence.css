@@ -14,5 +14,49 @@
 .evidence-links { display: grid; gap: .7rem; margin-top: 1.5rem; }
 .evidence-links a { display: flex; justify-content: space-between; padding: 1rem; border: 1px solid var(--line); text-decoration: none; font: .75rem var(--mono); }
 .evidence-links a:hover { border-color: var(--acid); color: var(--acid); }
-.case-note { border-left: 3px solid var(--orange); padding: 1rem 1.2rem; background: var(--surface); color: var(--muted); }
+.case-note { border: 1px solid var(--line); padding: 1rem 1.2rem; background: var(--surface); color: var(--muted); }
+.case-note::before { content: "SCOPE"; display: inline-block; margin-right: .6rem; padding: .1rem .4rem; border: 1px solid currentColor; font: 500 .6rem var(--mono); letter-spacing: .1em; color: var(--orange); }
 @media (max-width: 720px) { .case-grid { grid-template-columns: 1fr; gap: 1rem; } }
+
+/* Shared data-viz components for evidence pages */
+.viz-figure { margin: 0 0 1.5rem; }
+.viz-figcaption { font: .72rem/1.4 var(--mono); color: var(--muted); margin-bottom: .8rem; }
+.viz-svg { width: 100%; height: auto; }
+.viz-svg text { font-family: var(--mono); }
+.viz-readout { min-height: 2.2em; margin: .7rem 0 0; font: .76rem/1.4 var(--mono); color: var(--text); }
+.viz-table-toggle { background: none; border: 1px solid var(--line); padding: .4rem .7rem; color: var(--muted); font: .68rem var(--mono); cursor: pointer; margin-top: .6rem; }
+.viz-table { width: 100%; border-collapse: collapse; font: .72rem var(--mono); margin-top: .8rem; }
+.viz-table th, .viz-table td { text-align: left; padding: .45rem .5rem; border-top: 1px solid var(--line); }
+.viz-table[hidden] { display: none; }
+
+/* Suricata 88-rule waffle grid */
+.waffle-row { display: grid; grid-template-columns: 7rem 1fr; gap: .6rem; align-items: center; font: .66rem var(--mono); margin-bottom: .5rem; }
+.waffle-cells { display: flex; flex-wrap: wrap; gap: 3px; }
+.waffle-cells i { width: 11px; height: 11px; border: 1px solid var(--line); display: inline-block; cursor: pointer; }
+.waffle-cells i.fired { background: var(--acid); border-color: var(--acid); }
+.waffle-cells i.hotspot { border-color: var(--orange); box-shadow: inset 0 0 0 1px var(--orange); }
+.waffle-legend { display: flex; flex-wrap: wrap; gap: 1.2rem; font: .68rem var(--mono); color: var(--muted); margin: .8rem 0; }
+.waffle-legend .sw { display: inline-block; width: .6rem; height: .6rem; margin-right: .35rem; vertical-align: -1px; border: 1px solid var(--line); }
+.sw-fired { background: var(--acid); border-color: var(--acid) !important; }
+.sw-hotspot { border-color: var(--orange) !important; }
+
+/* RCA incident replay */
+.replay-stamp { display: inline-block; font: 500 .64rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--orange); border: 1px solid var(--orange); padding: .15rem .5rem; margin-bottom: 1rem; }
+.replay-controls { display: flex; gap: .8rem; align-items: center; margin: 1rem 0; font: .72rem var(--mono); }
+.replay-controls button { min-height: 40px; padding: 0 1rem; background: transparent; color: var(--text); border: 1px solid var(--line); font: inherit; cursor: pointer; }
+.replay-controls button:disabled { opacity: .35; cursor: default; }
+.replay-controls button:not(:disabled):hover { border-color: var(--acid); color: var(--acid); }
+.replay-pos { color: var(--muted); }
+.replay-log { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: .4rem; font: .76rem/1.45 var(--mono); }
+.replay-log li { color: var(--muted); padding: .5rem .6rem; border: 1px solid var(--line); background: var(--surface); transition: color .2s, border-color .2s; }
+.replay-log li.is-current { color: var(--text); border-color: var(--acid); }
+.replay-log li .step-idx { color: var(--acid); margin-right: .5rem; }
+.replay-log li.is-current .step-idx { color: var(--acid); }
+
+/* Metric provenance strip (C2-GNN) */
+.provenance-strip { margin: 0 0 1.5rem; }
+.split-metric { display: grid; gap: .5rem; border: 1px solid var(--line); padding: 1rem; background: var(--surface); margin-bottom: .8rem; }
+.split-metric .row { display: flex; justify-content: space-between; align-items: baseline; font: .8rem var(--mono); gap: 1rem; }
+.split-metric .row b { font-size: 1.3rem; color: var(--text); }
+.split-metric .row span { color: var(--muted); font-size: .72rem; text-align: right; }
+.split-metric .stamp { display: inline-block; margin-top: .3rem; font: 500 .64rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--orange); border: 1px solid var(--orange); padding: .2rem .55rem; }

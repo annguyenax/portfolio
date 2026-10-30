@@ -14,6 +14,8 @@ const translations = {
     benchmarkCases: "cases in a frozen v2 benchmark", guardLayers: "guard layers and provenance control", repeatable: "reproducible tests, evidence and release gates", readCase: "Read case study →",
     sreDescription: "A two-node lab deliberately broken, recovered, hardened and documented with real operational evidence.",
     sreNode1: "2× Ubuntu node", sreNode2: "Syslog / Prometheus", sreNode3: "RCA + saved output",
+    suriDescription: "88 hand-written rules, the same attack set replayed twice: default rules only, then +88 custom rules. Alerts rose 54 → 486, but only 16/88 rules actually fired.",
+    tonDescription: "An unsupervised autoencoder flagging anomalies across 4 telemetry layers without attack labels. High detection comes with double-digit false positives on 3 of 4 layers.",
     gnnDescription: "A research prototype turning network flows into a dynamic graph for GraphSAGE/GATv2 and multi-threaded streaming inference.",
     gnnNode1: "PCAP / flows", gnnNode2: "Dynamic graph", gnnNode3: "GraphSAGE / GATv2",
     inspectEvidence: "Inspect evidence", educationLabel: "EDUCATION / CONTEXT", degree: "B.Eng. Information Security · Final-year student",

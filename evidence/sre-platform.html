@@ -2,6 +2,42 @@
 <main class="case-main"><a class="case-back" href="../index.html#evidence">← TRỞ VỀ PORTFOLIO</a>
 <header class="case-hero"><div class="case-meta"><span>CASE 02</span><span>SRE / SECURITY PLATFORM</span><span>LINUX / DOCKER</span></div><h1>Mini SRE & Security Platform Lab</h1><p class="lead">Hai Ubuntu VM tạo thành một lab availability, observability, logging và hardening — được làm hỏng có chủ đích để chứng minh cách phát hiện và phục hồi.</p></header>
 <section class="case-grid"><h2>System</h2><div class="case-content"><h3>Một platform nhỏ nhưng đi đủ vòng đời vận hành.</h3><ul><li>HAProxy cân bằng tải cho hai app instance và kiểm chứng failover.</li><li>Prometheus/Grafana theo dõi health; Loki/Alloy tập trung log xuyên host.</li><li>dnsmasq, chrony, Ansible validation, SSH hardening và UFW allow-list.</li><li>Bash/Python health checks phục vụ kiểm tra lặp lại.</li></ul></div></section>
-<section class="case-grid"><h2>Evidence</h2><div class="case-content"><h3>Sự cố được biến thành tài liệu tuyển dụng có thể đọc.</h3><p>Lab có 6 RCA, 8 troubleshooting runbook và command output lưu theo từng phase. Các lỗi thật được ghi lại gồm false positive trong script health-check và lỗi thứ tự load cấu hình SSH.</p><div class="evidence-links"><a href="https://github.com/annguyenax/sre-security-platform-lab" target="_blank" rel="noreferrer"><span>Repository & system overview</span><span>↗</span></a><a href="https://github.com/annguyenax/sre-security-platform-lab/tree/main/rca" target="_blank" rel="noreferrer"><span>Root-cause analyses</span><span>↗</span></a><a href="https://github.com/annguyenax/sre-security-platform-lab/tree/main/troubleshooting" target="_blank" rel="noreferrer"><span>Troubleshooting runbooks</span><span>↗</span></a></div></div></section>
+<section class="case-grid"><h2>Evidence</h2><div class="case-content"><h3>Sự cố được biến thành tài liệu tuyển dụng có thể đọc.</h3><p>Lab có 6 RCA, 8 troubleshooting runbook và command output lưu theo từng phase. Các lỗi thật được ghi lại gồm false positive trong script health-check và lỗi thứ tự load cấu hình SSH.</p>
+<section class="replay" id="rcaReplay" aria-labelledby="rcaTitle">
+  <p class="replay-stamp" id="rcaTitle">REPLAY OF A DOCUMENTED INCIDENT · RCA-03 · 2026-07-09</p>
+  <p class="viz-figcaption">Alloy (log collector) trên sre-node-1 bị dừng có chủ đích để kiểm tra điều gì xảy ra với log sinh ra trong lúc pipeline đứt. Giả định ban đầu: mất vĩnh viễn. Kết quả thật khác dự đoán.</p>
+  <div class="replay-controls">
+    <button type="button" id="rcaPrev">← Bước trước</button>
+    <span class="replay-pos" id="rcaPos" aria-live="polite">1 / 4</span>
+    <button type="button" id="rcaNext">Bước sau →</button>
+  </div>
+  <ol class="replay-log">
+    <li data-step="0" class="is-current"><span class="step-idx">01</span>Dừng Alloy có chủ đích trên sre-node-1 (<code>docker compose stop alloy</code>); sre-lb/app1/app2 vẫn chạy và log cục bộ bình thường.</li>
+    <li data-step="1"><span class="step-idx">02</span>Gửi 1 request thật qua HAProxy trong lúc Alloy dừng. <code>docker logs sre-lb</code> xác nhận HAProxy đã ghi dòng đó cục bộ — request có thật, độc lập với Alloy.</li>
+    <li data-step="2"><span class="step-idx">03</span>Truy vấn Loki trong lúc Alloy còn dừng: dòng mới nhất vẫn là trước khi Alloy dừng — đúng như dự đoán, có khoảng trống.</li>
+    <li data-step="3"><span class="step-idx">04</span>Khởi động lại Alloy, gửi request thứ hai, truy vấn lại: Loki trả về <b>cả dòng đã "mất"</b> ở bước 2 — vì Alloy đọc lại file log Docker còn giữ, không chỉ log mới. Chưa test trường hợp file đã bị rotate/truncate.</li>
+  </ol>
+</section>
+<div class="evidence-links"><a href="https://github.com/annguyenax/sre-security-platform-lab" target="_blank" rel="noreferrer"><span>Repository & system overview</span><span>↗</span></a><a href="https://github.com/annguyenax/sre-security-platform-lab/blob/main/rca/incident-03-logging-pipeline-down.md" target="_blank" rel="noreferrer"><span>RCA-03 full write-up</span><span>↗</span></a><a href="https://github.com/annguyenax/sre-security-platform-lab/tree/main/rca" target="_blank" rel="noreferrer"><span>All 6 root-cause analyses</span><span>↗</span></a></div></div></section>
 <section class="case-grid"><h2>What I learned</h2><div class="case-content"><h3>“Service is up” chưa phải là evidence.</h3><p>Validation cần kiểm tra cả chiều dương lẫn chiều âm: traffic được phép phải đi qua, traffic không được phép phải thật sự bị chặn. Cấu hình chỉ đáng tin khi kiểm tra effective state, không phải chỉ nhìn file.</p><p class="case-note">Scope trung thực: lab-scale trên hai VM, không đại diện cho production HA hay cloud deployment.</p></div></section>
-</main></body></html>
+</main>
+<script>
+(function () {
+  const items = Array.from(document.querySelectorAll('#rcaReplay .replay-log li'));
+  const prev = document.querySelector('#rcaPrev');
+  const next = document.querySelector('#rcaNext');
+  const pos = document.querySelector('#rcaPos');
+  if (!items.length || !prev || !next) return;
+  let step = 0;
+  function render() {
+    items.forEach((li, i) => li.classList.toggle('is-current', i === step));
+    pos.textContent = (step + 1) + ' / ' + items.length;
+    prev.disabled = step === 0;
+    next.disabled = step === items.length - 1;
+  }
+  prev.addEventListener('click', () => { step = Math.max(0, step - 1); render(); });
+  next.addEventListener('click', () => { step = Math.min(items.length - 1, step + 1); render(); });
+  render();
+})();
+</script>
+</body></html>

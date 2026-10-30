@@ -17,7 +17,7 @@
   <title>Nguyễn Văn An — SOC Monitoring Intern</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script>document.documentElement.dataset.theme = localStorage.getItem('portfolio-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');</script>
   <script defer src="app.js"></script>
@@ -65,7 +65,7 @@
             <path d="M24 16 V252 H300"/>
             <path d="M24 32 H300 M24 134 H300" opacity=".25"/>
           </g>
-          <g font-family="DM Mono, ui-monospace, monospace" font-size="9" fill="currentColor" opacity=".7">
+          <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="9" fill="currentColor" opacity=".7">
             <text x="20" y="20" text-anchor="end">100%</text>
             <text x="20" y="138" text-anchor="end">50%</text>
             <text x="20" y="256" text-anchor="end">0</text>
@@ -161,7 +161,21 @@
 
       <div class="project-grid">
         <article class="project-card">
-          <div class="card-top"><span>CASE 02</span><span>SRE / PLATFORM</span></div>
+          <div class="card-top"><span>CASE 02</span><span>DETECTION / IDS</span></div>
+          <h3>Suricata Custom Rules Lab</h3>
+          <p data-i18n="suriDescription">88 rule tự viết, chạy lại cùng một bộ tấn công hai lần: chỉ rule mặc định, rồi thêm 88 rule. Alert tăng 54 → 486, nhưng chỉ 16/88 rule thật sự bắn.</p>
+          <div class="mini-metrics"><span><strong>88</strong> custom rules</span><span><strong>16</strong>/88 fired</span><span><strong>4</strong> ATT&amp;CK ID</span></div>
+          <a class="card-link" href="evidence/suricata.html"><span data-i18n="inspectEvidence">Xem evidence</span><span>↗</span></a>
+        </article>
+        <article class="project-card">
+          <div class="card-top"><span>CASE 03</span><span>ANOMALY DETECTION</span></div>
+          <h3>TON_IoT Zero-Day Autoencoder</h3>
+          <p data-i18n="tonDescription">Autoencoder không giám sát, phát hiện bất thường trên 4 lớp telemetry mà không cần nhãn tấn công. Detection cao đi kèm false positive hai chữ số ở 3/4 lớp.</p>
+          <div class="mini-metrics"><span><strong>94.8%</strong> mean DR</span><span><strong>16.0%</strong> mean FP</span><span><strong>4</strong> layers</span></div>
+          <a class="card-link" href="evidence/ton-iot.html"><span data-i18n="inspectEvidence">Xem evidence</span><span>↗</span></a>
+        </article>
+        <article class="project-card">
+          <div class="card-top"><span>CASE 04</span><span>SRE / PLATFORM</span></div>
           <h3>Mini SRE & Security Platform Lab</h3>
           <p data-i18n="sreDescription">Lab hai node được chủ động làm hỏng, phục hồi, harden và ghi lại bằng bằng chứng vận hành thực tế.</p>
           <div class="mini-topology" role="group" aria-label="SRE lab flow">
@@ -175,7 +189,7 @@
           <a class="card-link" href="evidence/sre-platform.html"><span data-i18n="inspectEvidence">Xem evidence</span><span>↗</span></a>
         </article>
         <article class="project-card accent-card">
-          <div class="card-top"><span>CASE 03</span><span>ML / NETWORK</span></div>
+          <div class="card-top"><span>CASE 05</span><span>ML / NETWORK</span></div>
           <h3>Realtime C2 Detection with GNN</h3>
           <p data-i18n="gnnDescription">Research prototype mô hình hóa network flow thành dynamic graph cho GraphSAGE/GATv2 và streaming inference nhiều luồng.</p>
           <div class="mini-topology" role="group" aria-label="C2-GNN lab flow">

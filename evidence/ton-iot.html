@@ -1,0 +1,82 @@
+<!doctype html><html lang="vi" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Case study: TON_IoT Zero-Day Autoencoder — detection vs false positive by layer"><title>TON_IoT Zero-Day Autoencoder — Evidence</title><link rel="stylesheet" href="evidence.css"></head><body>
+<main class="case-main"><a class="case-back" href="../index.html#evidence">← TRỞ VỀ PORTFOLIO</a>
+<header class="case-hero"><div class="case-meta"><span>CASE 03</span><span>ANOMALY DETECTION</span><span>UNSUPERVISED / AUTOENCODER</span></div><h1>TON_IoT Zero-Day Autoencoder</h1><p class="lead">Autoencoder không giám sát, train chỉ trên traffic bình thường, phát hiện bất thường qua reconstruction error — không cần nhãn tấn công.</p></header>
+
+<section class="case-grid"><h2>Approach</h2><div class="case-content"><h3>Ngưỡng cắt quyết định cả detection lẫn false positive.</h3><p>Autoencoder học cách tái tạo traffic bình thường. Traffic có reconstruction error cao hơn ngưỡng bị gắn cờ bất thường. Ngưỡng của lớp Network là percentile 75 của reconstruction error trên chính dữ liệu benign — nghĩa là ~25% traffic bình thường bị gắn cờ gần như theo thiết kế, không phải lỗi ngẫu nhiên.</p></div></section>
+
+<section class="case-grid"><h2>Evidence</h2><div class="case-content"><h3>Detection cao không miễn phí — đổi lại bằng false positive.</h3>
+<figure class="viz-figure" id="tonChart2">
+  <figcaption class="viz-figcaption">src: README.md §Performance Metrics. AVERAGE row đã sửa 2026-10 vì không khớp bảng gốc (README cũ ghi 95.5/16.2/86.6%, tính lại ra 94.8/16.0/88.4%).</figcaption>
+  <svg class="viz-svg" viewBox="0 0 640 260" role="img" aria-labelledby="tonT2">
+    <title id="tonT2">Detection rate và false positive của 4 lớp TON_IoT, cùng trục 0-100%</title>
+    <g stroke="var(--line)" fill="none">
+      <path d="M100 16 V210 H620"/>
+      <path d="M100 36 H620 M100 113 H620" opacity=".5"/>
+    </g>
+    <g font-family="var(--mono)" font-size="10" fill="var(--muted)">
+      <text x="92" y="40" text-anchor="end">100%</text>
+      <text x="92" y="117" text-anchor="end">50%</text>
+      <text x="92" y="214" text-anchor="end">0</text>
+    </g>
+    <!-- baseline y=210, 174px=100% -->
+    <g font-family="var(--mono)" font-size="11" fill="var(--text)">
+      <text x="8" y="56">Network</text>
+      <rect class="t-fp" x="100" y="46" width="38.28" height="14" fill="var(--orange)"/>
+      <rect class="t-dr" x="100" y="46" width="173.65" height="6" fill="var(--acid)"/>
+      <text x="280" y="58" font-size="10">DR 99.80% · FP 22.00% · sep 328×</text>
+
+      <text x="8" y="96">IoT (Modbus)</text>
+      <rect class="t-fp" x="100" y="86" width="34.8" height="14" fill="var(--orange)"/>
+      <rect class="t-dr" x="100" y="86" width="172.78" height="6" fill="var(--acid)"/>
+      <text x="280" y="98" font-size="10">DR 99.5% · FP 20.00% · sep 33×</text>
+
+      <text x="8" y="136">Linux</text>
+      <rect class="t-fp" x="100" y="126" width="31.32" height="14" fill="var(--orange)"/>
+      <rect class="t-dr" x="100" y="126" width="142.68" height="6" fill="var(--acid)"/>
+      <text x="280" y="138" font-size="10">DR 82.00% · FP 18.00% · sep 8×</text>
+
+      <text x="8" y="176">Windows</text>
+      <rect class="t-fp" x="100" y="166" width="6.96" height="14" fill="var(--orange)"/>
+      <rect class="t-dr" x="100" y="166" width="170.52" height="6" fill="var(--acid)"/>
+      <text x="280" y="178" font-size="10">DR 98% · FP 4.00% · sep 36×</text>
+    </g>
+    <line x1="100" y1="182.2" x2="620" y2="182.2" stroke="var(--orange)" stroke-dasharray="4 3"/>
+    <text x="624" y="186" font-family="var(--mono)" font-size="10" fill="var(--orange)">mean FP 16.0%</text>
+    <g font-family="var(--mono)" font-size="10" fill="var(--muted)">
+      <rect x="100" y="228" width="14" height="8" fill="var(--acid)"/><text x="120" y="236">Detection rate</text>
+      <rect x="260" y="228" width="14" height="8" fill="var(--orange)"/><text x="280" y="236">False positive</text>
+    </g>
+  </svg>
+  <button class="viz-table-toggle" type="button" id="tonTableToggle" aria-expanded="false">Xem bảng số</button>
+  <table class="viz-table" id="tonTable" hidden>
+    <thead><tr><th>Layer</th><th>Detection</th><th>FP</th><th>Accuracy</th><th>Separation</th><th>Features</th></tr></thead>
+    <tbody>
+      <tr><td>Network</td><td>99.80%</td><td>22.00%</td><td>89.00%</td><td>328×</td><td>40</td></tr>
+      <tr><td>IoT (Modbus)</td><td>99.5%</td><td>20.00%</td><td>90.00%</td><td>33×</td><td>5</td></tr>
+      <tr><td>Linux</td><td>82.00%</td><td>18.00%</td><td>77.8%</td><td>8×</td><td>12</td></tr>
+      <tr><td>Windows</td><td>98%</td><td>4.00%</td><td>96.6%</td><td>36×</td><td>52</td></tr>
+      <tr><td><b>Mean of rows</b></td><td><b>94.8%</b></td><td><b>16.0%</b></td><td><b>88.4%</b></td><td>101×</td><td>—</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Separation = mean(attack reconstruction error) / mean(normal reconstruction error). Đây là tỉ số trung bình, không đo độ chồng lấn phân phối — Network có separation cao nhất (328×) nhưng vẫn FP 22%, vì ngưỡng cắt theo percentile, không theo separation.</p>
+
+<div class="evidence-links"><a href="https://github.com/annguyenax/ton-iot-zero-day-ids" target="_blank" rel="noreferrer"><span>Repository</span><span>↗</span></a><a href="https://github.com/annguyenax/ton-iot-zero-day-ids#-performance-metrics" target="_blank" rel="noreferrer"><span>README → Performance Metrics</span><span>↗</span></a><a href="https://github.com/annguyenax/ton-iot-zero-day-ids/blob/main/src/train_unsupervised.py" target="_blank" rel="noreferrer"><span>src/train_unsupervised.py (ngưỡng percentile)</span><span>↗</span></a></div>
+</div></section>
+
+<section class="case-grid"><h2>What I learned</h2><div class="case-content"><h3>FP cao không phải "model tệ" — là chỗ cần khai báo rõ.</h3><p>Khi viết CV, dễ chỉ trích "Detection 95.5%" mà bỏ qua phần sau dấu phẩy. Thực tế: detection cao ở 3/4 lớp đi kèm FP hai chữ số, trừ Windows. Một analyst SOC đọc số này cần biết ngay: autoencoder này hợp để triage/alert bổ sung, chưa hợp để auto-block.</p><p class="case-note">Scope trung thực: dataset TON_IoT công khai, không phải traffic thật của một tổ chức. Số liệu lấy từ README, chưa được assistant này tái chạy độc lập trong vòng review này.</p></div></section>
+</main>
+<script>
+(function () {
+  const btn = document.querySelector('#tonTableToggle');
+  const table = document.querySelector('#tonTable');
+  if (!btn || !table) return;
+  btn.addEventListener('click', () => {
+    const show = table.hidden;
+    table.hidden = !show;
+    btn.setAttribute('aria-expanded', String(show));
+  });
+})();
+</script>
+</body></html>

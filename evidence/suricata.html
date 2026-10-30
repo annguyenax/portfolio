@@ -1,0 +1,112 @@
+<!doctype html><html lang="vi" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Case study: Suricata Custom Rules Lab — 88 custom rules, alert volume vs rule-fire rate"><title>Suricata Custom Rules Lab — Evidence</title><link rel="stylesheet" href="evidence.css"></head><body>
+<main class="case-main"><a class="case-back" href="../index.html#evidence">← TRỞ VỀ PORTFOLIO</a>
+<header class="case-hero"><div class="case-meta"><span>CASE 02</span><span>DETECTION / IDS</span><span>SURICATA / KALI LAB</span></div><h1>Suricata Custom Rules Lab</h1><p class="lead">3 VM (Kali attacker, target, Suricata sensor trên bridge br0). Cùng một bộ tấn công được chạy lại hai lần: chỉ rule mặc định, rồi thêm 88 rule tự viết.</p></header>
+
+<section class="case-grid"><h2>Setup</h2><div class="case-content"><h3>3 scenario, cùng attack profile, so trực tiếp.</h3><ul>
+<li><b>Scenario 1 (baseline):</b> chỉ default rules (~30,000), 500 port scan + 100 SQLi + 50 SSH brute → 54 alerts.</li>
+<li><b>Scenario 2 (enhanced):</b> default + 88 custom rules (~47,324 tổng), cùng attack profile → 486 alerts.</li>
+<li><b>Scenario 3 (benign):</b> traffic bình thường (ping, HTTP, SSH login hợp lệ) để đo false positive.</li>
+</ul></div></section>
+
+<section class="case-grid"><h2>Evidence</h2><div class="case-content"><h3>Alert tăng 9×, nhưng đó không phải thước đo chất lượng.</h3>
+<figure class="viz-figure" id="suriAlerts">
+  <figcaption class="viz-figcaption">src: results/REAL_COMPARISON_REPORT.txt, results/scenario{1,2,3}/summary.txt. 486/650 từng bị gọi nhầm là "Detection Rate" trong file gốc — đã sửa lại thành tỉ lệ alert/attempt (xem log sửa trong repo).</figcaption>
+  <svg class="viz-svg" viewBox="0 0 640 220" role="img" aria-labelledby="suriT">
+    <title id="suriT">Alert count theo category, baseline so với enhanced, và false positive trên traffic bình thường</title>
+    <g font-family="var(--mono)" font-size="11" fill="var(--text)">
+      <text x="8" y="28">Port scan</text>
+      <rect x="150" y="14" width="300" height="16" fill="none" stroke="var(--muted)"/>
+      <rect x="150" y="14" width="204" height="16" fill="var(--acid)"/>
+      <line x1="162" y1="10" x2="162" y2="34" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <text x="460" y="26">340 / 500 (baseline ≈20)</text>
+
+      <text x="8" y="60">SQL injection</text>
+      <rect x="150" y="46" width="60" height="16" fill="none" stroke="var(--muted)"/>
+      <rect x="150" y="46" width="60.6" height="16" fill="var(--acid)"/>
+      <line x1="153" y1="42" x2="153" y2="66" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <text x="220" y="58">101 / 100 (baseline ≈5) — alert ≠ detection</text>
+
+      <text x="8" y="92">SSH brute force</text>
+      <rect x="150" y="78" width="30" height="16" fill="none" stroke="var(--muted)"/>
+      <rect x="150" y="78" width="18" height="16" fill="var(--acid)"/>
+      <line x1="156" y1="74" x2="156" y2="98" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <text x="190" y="90">30 / 50 (baseline ≈10)</text>
+
+      <line x1="8" x2="620" y1="118" y2="118" stroke="var(--line)"/>
+      <text x="8" y="146">Benign (scenario 3)</text>
+      <rect x="150" y="132" width="12" height="16" fill="none" stroke="var(--muted)"/>
+      <rect x="150" y="132" width="19.2" height="16" fill="var(--orange)"/>
+      <text x="180" y="144" fill="var(--orange)">32 alerts / ~20 actions · 20 từ một rule (SID 1000017)</text>
+
+      <text x="8" y="188" fill="var(--muted)" font-size="10">□ attempts · ■ alerts (88 custom rules) · ┆ ≈ baseline (default rules only)</text>
+      <text x="8" y="206" fill="var(--muted)" font-size="10">Ruleset: ~30,000 (baseline) → ~47,324 (+88 custom rules)</text>
+    </g>
+  </svg>
+</figure>
+
+<h3>88 rule, nhưng chỉ 16 rule thật sự bắn.</h3>
+<p>Kết quả scenario 2 chỉ nêu tên 4 SID đã bắn (SID 1000001 TCP SYN scan, SID 1000015 Sequential port scan, SID 1000111 SQL OR 1=1, SID 1000301 SSH multiple attempts). Grid dưới hiển thị cả 88 rule theo đúng SID thật trong repo — ô nào không có tên trong kết quả thì để trống, không đoán.</p>
+<div data-waffle id="suriWaffle">
+  <div class="waffle-row" data-cat="portscan"><span>portscan · 17</span><span class="waffle-cells"></span></div>
+  <div class="waffle-row" data-cat="sqli"><span>sqli · 28</span><span class="waffle-cells"></span></div>
+  <div class="waffle-row" data-cat="bruteforce"><span>bruteforce · 26</span><span class="waffle-cells"></span></div>
+  <div class="waffle-row" data-cat="exploits"><span>exploits · 17</span><span class="waffle-cells"></span></div>
+  <div class="waffle-legend">
+    <span><span class="sw sw-fired"></span>SID được nêu tên là đã bắn (4/88)</span>
+    <span><span class="sw sw-hotspot"></span>nguồn FP chính (SID 1000017)</span>
+    <span>ô trống = 1 trong 84 rule còn lại, chưa rõ có bắn hay không</span>
+  </div>
+  <p class="viz-readout" id="suriReadout" aria-live="polite">Di chuột hoặc bấm vào một ô để xem SID.</p>
+</div>
+
+<h3>MITRE ATT&amp;CK mapping — theo category, không có trong metadata rule.</h3>
+<p class="case-note">Scope trung thực: repo không gắn <code>metadata: mitre_technique_id</code> vào rule nào (grep "T1" trong file <code>.rules</code> = 0 kết quả). Mapping T1595/T1190/T1110/T1046 dưới đây do tự gán theo category tên rule, chưa phải dữ liệu có sẵn trong repo.</p>
+<table class="viz-table">
+  <thead><tr><th>Technique</th><th>Tactic</th><th>Rule category</th><th>Rules</th></tr></thead>
+  <tbody>
+    <tr><td>T1595 / T1046</td><td>Reconnaissance / Discovery</td><td>portscan</td><td>17</td></tr>
+    <tr><td>T1190</td><td>Initial Access</td><td>sqli, exploits</td><td>28 + 17</td></tr>
+    <tr><td>T1110</td><td>Credential Access</td><td>bruteforce</td><td>26</td></tr>
+  </tbody>
+</table>
+
+<div class="evidence-links"><a href="https://github.com/annguyenax/suricata-ids-custom-rules" target="_blank" rel="noreferrer"><span>Repository</span><span>↗</span></a><a href="https://github.com/annguyenax/suricata-ids-custom-rules/blob/main/results/REAL_COMPARISON_REPORT.txt" target="_blank" rel="noreferrer"><span>results/REAL_COMPARISON_REPORT.txt</span><span>↗</span></a><a href="https://github.com/annguyenax/suricata-ids-custom-rules/tree/main/rules" target="_blank" rel="noreferrer"><span>rules/ (88 custom SIDs)</span><span>↗</span></a><a href="https://github.com/annguyenax/suricata-ids-custom-rules/blob/main/docs/ANALYSIS_REPORT.md" target="_blank" rel="noreferrer"><span>docs/ANALYSIS_REPORT.md</span><span>↗</span></a></div>
+</div></section>
+
+<section class="case-grid"><h2>What I learned</h2><div class="case-content"><h3>Alert count không phải detection rate.</h3><p>Viết rule dễ hơn validate rule. Một con số "+800% alert" nghe ấn tượng, nhưng nếu không tách được true positive khỏi false positive thì nó chỉ làm tăng khối lượng cho người trực SOC. Lần tới mình sẽ log rõ SID nào bắn ở mỗi test để không phải suy đoán 84/88 rule còn lại.</p><p class="case-note">Scope trung thực: 3 VM, mỗi scenario chạy 1 lần, không lặp lại để đo phương sai. Alert ≠ attack đã bị chặn — Suricata ở chế độ IDS (log), không phải IPS (block) trong lab này.</p></div></section>
+</main>
+<script>
+(function () {
+  const RULES = {
+    portscan: [1000001,1000002,1000003,1000004,1000005,1000006,1000007,1000008,1000009,1000010,1000011,1000012,1000013,1000014,1000015,1000016,1000017],
+    sqli: [1000101,1000102,1000103,1000104,1000111,1000112,1000113,1000114,1000121,1000122,1000123,1000124,1000131,1000132,1000133,1000141,1000142,1000143,1000151,1000152,1000153,1000161,1000162,1000163,1000171,1000172,1000173,1000174],
+    bruteforce: [1000301,1000302,1000303,1000304,1000305,1000311,1000312,1000313,1000316,1000317,1000318,1000321,1000322,1000323,1000331,1000332,1000333,1000326,1000341,1000342,1000343,1000344,1000351,1000352,1000361,1000362],
+    exploits: [1000501,1000502,1000503,1000504,1000505,1000512,1000513,1000516,1000517,1000518,1000519,1000520,1000521,1000522,1000523,1000531,1000541]
+  };
+  const NAMED_FIRED = new Set([1000001, 1000015, 1000111, 1000301]);
+  const BENIGN_HOTSPOT = 1000017;
+  const root = document.querySelector('#suriWaffle');
+  const readout = document.querySelector('#suriReadout');
+  if (!root) return;
+  Object.entries(RULES).forEach(([cat, sids]) => {
+    const row = root.querySelector('.waffle-row[data-cat="' + cat + '"] .waffle-cells');
+    if (!row) return;
+    sids.forEach((sid) => {
+      const i = document.createElement('i');
+      i.dataset.sid = sid;
+      i.tabIndex = 0;
+      if (NAMED_FIRED.has(sid)) i.classList.add('fired');
+      if (sid === BENIGN_HOTSPOT) i.classList.add('hotspot');
+      row.appendChild(i);
+    });
+  });
+  function describe(sid) {
+    if (sid === BENIGN_HOTSPOT) return 'SID ' + sid + ' (TCP ACK scan): nguồn chính của false positive — 20/32 alert benign đến từ rule này (docs/ANALYSIS_REPORT.md §5.1).';
+    if (NAMED_FIRED.has(sid)) return 'SID ' + sid + ': được nêu tên là đã bắn trong scenario 2 (results/scenario2/summary.txt).';
+    return 'SID ' + sid + ': không được nêu tên trong kết quả — 1 trong 84 rule chưa rõ có bắn hay không ở lần chạy này.';
+  }
+  root.addEventListener('pointerover', (e) => { const sid = Number(e.target?.dataset?.sid); if (sid) readout.textContent = describe(sid); });
+  root.addEventListener('focusin', (e) => { const sid = Number(e.target?.dataset?.sid); if (sid) readout.textContent = describe(sid); });
+})();
+</script>
+</body></html>
