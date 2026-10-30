@@ -3,15 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Portfolio và CV của Nguyễn Văn An — sinh viên An toàn thông tin, tập trung vào AI security, detection engineering và security platform.">
+  <meta name="description" content="Portfolio và CV của Nguyễn Văn An — sinh viên An toàn thông tin ứng tuyển SOC / Security Monitoring Intern, với lab Suricata, SRE 2-node và detection trên TON_IoT.">
   <meta name="theme-color" content="#07110f">
-  <meta property="og:title" content="Nguyễn Văn An — Security Engineer Portfolio">
-  <meta property="og:description" content="Một CV ngắn để scan, với evidence kỹ thuật để đào sâu.">
-  <title>Nguyễn Văn An — Security Engineer</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://annguyenax.github.io/portfolio/">
+  <meta property="og:title" content="Nguyễn Văn An — SOC Monitoring Intern · Detection Labs">
+  <meta property="og:description" content="Sinh viên ATTT năm cuối. Lab Suricata 88 rules, lab 2-node logging/hardening, autoencoder TON_IoT. CV ngắn, evidence để đào.">
+  <meta property="og:image" content="https://annguyenax.github.io/portfolio/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Nguyễn Văn An — SOC Monitoring Intern</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.dataset.theme = localStorage.getItem('portfolio-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');</script>
   <script defer src="app.js"></script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Person","name":"Nguyễn Văn An","url":"https://github.com/annguyenax","jobTitle":"Information Security Student","affiliation":{"@type":"CollegeOrUniversity","name":"Posts and Telecommunications Institute of Technology"},"sameAs":["https://github.com/annguyenax"]}
@@ -20,7 +28,7 @@
 <body>
   <a class="skip-link" href="#main">Đi tới nội dung</a>
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Về đầu trang"><span>AN</span><small>SECURITY / AI</small></a>
+    <a class="brand" href="#top" aria-label="Về đầu trang"><span>AN</span><small>SECURITY / SOC</small></a>
     <nav aria-label="Điều hướng chính">
       <a href="#profile" data-i18n="navProfile">Hồ sơ</a>
       <a href="#evidence" data-i18n="navEvidence">Bằng chứng</a>
@@ -38,8 +46,8 @@
       <div class="hero-copy">
         <p class="eyebrow"><span class="status-dot"></span><span data-i18n="available">Sẵn sàng cho cơ hội thực tập / fresher</span></p>
         <h1>Nguyễn Văn An</h1>
-        <p class="hero-role">SECURITY ENGINEER <span>/</span> AI SECURITY</p>
-        <p class="hero-summary" data-i18n="summary">Sinh viên năm cuối ngành An toàn thông tin, xây dựng các hệ thống phòng thủ có thể kiểm chứng — từ LLM guardrails và phát hiện C2 bằng GNN đến SRE observability và network IDS.</p>
+        <p class="hero-role" data-i18n="heroRole">THỰC TẬP SOC / DETECTION LABS</p>
+        <p class="hero-summary" data-i18n="summary">Sinh viên năm cuối ngành An toàn thông tin, đang ứng tuyển SOC / Security Monitoring Intern. Có thể trình bày ngay: lab Suricata 88 rule, lab 2-node logging/hardening, autoencoder phát hiện bất thường trên TON_IoT — và đang mở rộng sang AI security/C2 detection.</p>
         <div class="hero-actions">
           <a class="button" href="#evidence" data-i18n="exploreWork">Xem bằng chứng năng lực</a>
           <a class="button button-ghost" href="https://github.com/annguyenax" target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -48,7 +56,7 @@
       <aside class="signal-card" aria-label="Tóm tắt hồ sơ">
         <div class="signal-header"><span data-i18n="signalTitle">TÍN HIỆU HỒ SƠ</span><span>01</span></div>
         <dl>
-          <div><dt data-i18n="focus">Trọng tâm</dt><dd>AI Security<br>Detection Engineering</dd></div>
+          <div><dt data-i18n="focus">Trọng tâm</dt><dd data-i18n="focusValue">Suricata lab · SRE 2-node lab · TON_IoT detection</dd></div>
           <div><dt data-i18n="base">Địa điểm</dt><dd>Ho Chi Minh City, VN</dd></div>
           <div><dt data-i18n="education">Học vấn</dt><dd>PTIT · Information Security</dd></div>
           <div><dt data-i18n="evidenceFirst">Cách làm</dt><dd>Evidence-first · Reproducible</dd></div>
@@ -102,7 +110,6 @@
         <div class="architecture-visual" aria-label="Sơ đồ pipeline bảo mật">
           <span class="node n1">INPUT</span><span class="node n2">GUARD</span><span class="node n3">RAG</span><span class="node n4">LLM</span><span class="node n5">OUTPUT</span>
           <i class="line l1"></i><i class="line l2"></i><i class="line l3"></i><i class="line l4"></i>
-          <div class="radar"></div>
         </div>
       </article>
 
@@ -111,6 +118,13 @@
           <div class="card-top"><span>CASE 02</span><span>SRE / PLATFORM</span></div>
           <h3>Mini SRE & Security Platform Lab</h3>
           <p data-i18n="sreDescription">Lab hai node được chủ động làm hỏng, phục hồi, harden và ghi lại bằng bằng chứng vận hành thực tế.</p>
+          <div class="mini-topology" role="group" aria-label="SRE lab flow">
+            <span class="topo-node" data-i18n="sreNode1">2× Ubuntu node</span>
+            <span class="topo-arrow" aria-hidden="true">→</span>
+            <span class="topo-node" data-i18n="sreNode2">Syslog / Prometheus</span>
+            <span class="topo-arrow" aria-hidden="true">→</span>
+            <span class="topo-node" data-i18n="sreNode3">RCA + saved output</span>
+          </div>
           <div class="mini-metrics"><span><strong>6</strong> RCA</span><span><strong>8</strong> runbooks</span><span><strong>2</strong> nodes</span></div>
           <a class="card-link" href="evidence/sre-platform.html"><span data-i18n="inspectEvidence">Xem evidence</span><span>↗</span></a>
         </article>
@@ -118,6 +132,13 @@
           <div class="card-top"><span>CASE 03</span><span>ML / NETWORK</span></div>
           <h3>Realtime C2 Detection with GNN</h3>
           <p data-i18n="gnnDescription">Research prototype mô hình hóa network flow thành dynamic graph cho GraphSAGE/GATv2 và streaming inference nhiều luồng.</p>
+          <div class="mini-topology" role="group" aria-label="C2-GNN lab flow">
+            <span class="topo-node" data-i18n="gnnNode1">PCAP / flows</span>
+            <span class="topo-arrow" aria-hidden="true">→</span>
+            <span class="topo-node" data-i18n="gnnNode2">Dynamic graph</span>
+            <span class="topo-arrow" aria-hidden="true">→</span>
+            <span class="topo-node" data-i18n="gnnNode3">GraphSAGE / GATv2</span>
+          </div>
           <div class="mini-metrics"><span><strong>3</strong> threads</span><span><strong>14</strong> features</span><span><strong>2</strong> GNNs</span></div>
           <a class="card-link" href="evidence/c2-gnn.html"><span data-i18n="inspectEvidence">Xem evidence</span><span>↗</span></a>
         </article>

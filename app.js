@@ -3,8 +3,9 @@ const translations = {
   en: {
     navProfile: "Profile", navEvidence: "Evidence", navContact: "Contact", downloadCv: "Download CV",
     available: "Open to internship / graduate opportunities",
-    summary: "Final-year Information Security student building verifiable defensive systems — from LLM guardrails and GNN-based C2 detection to SRE observability and network IDS.",
-    exploreWork: "Explore the evidence", signalTitle: "PROFILE SIGNAL", focus: "Focus", base: "Based in", education: "Education", evidenceFirst: "Approach",
+    heroRole: "SOC INTERN / DETECTION LABS",
+    summary: "Final-year Information Security student applying for SOC / Security Monitoring Intern roles. Ready to walk through: a Suricata rules lab, a 2-node logging/hardening lab, and an anomaly detector on TON_IoT — and expanding into AI security/C2 detection.",
+    exploreWork: "Explore the evidence", signalTitle: "PROFILE SIGNAL", focus: "Focus", focusValue: "Suricata lab · SRE 2-node lab · TON_IoT detection", base: "Based in", education: "Education", evidenceFirst: "Approach",
     profileLabel: "PROFILE / CV", whatIDo: "I turn security problems into systems that can run, measure and be verified.",
     approach: "I work at the intersection of security engineering, machine learning and system operations. Every project prioritizes an explicit threat model, traceable data, reproducible tests and honest limitations.",
     capabilities: "Core capabilities", evidenceLabel: "EVIDENCE / SELECTED WORK", proofTitle: "Don't trust keywords alone.\nSee how the system was built.",
@@ -12,7 +13,9 @@ const translations = {
     llmDescription: "A proof-of-concept LLM security gateway protecting a RAG pipeline against prompt injection, data leakage and document poisoning with layered guardrails.",
     benchmarkCases: "cases in a frozen v2 benchmark", guardLayers: "guard layers and provenance control", repeatable: "reproducible tests, evidence and release gates", readCase: "Read case study →",
     sreDescription: "A two-node lab deliberately broken, recovered, hardened and documented with real operational evidence.",
+    sreNode1: "2× Ubuntu node", sreNode2: "Syslog / Prometheus", sreNode3: "RCA + saved output",
     gnnDescription: "A research prototype turning network flows into a dynamic graph for GraphSAGE/GATv2 and multi-threaded streaming inference.",
+    gnnNode1: "PCAP / flows", gnnNode2: "Dynamic graph", gnnNode3: "GraphSAGE / GATv2",
     inspectEvidence: "Inspect evidence", educationLabel: "EDUCATION / CONTEXT", degree: "B.Eng. Information Security · Final-year student",
     nextConversation: "THE NEXT CONVERSATION", contactTitle: "Have a security problem that needs\nsomeone to follow the evidence?", footerNote: "Built as a CV. Designed as evidence."
   }
